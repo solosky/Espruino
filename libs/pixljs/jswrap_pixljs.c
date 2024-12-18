@@ -401,17 +401,31 @@ void jswrap_pixljs_init() {
   jshPinSetValue(LCD_SPI_RST,1);
   jshDelayMicroseconds(10000);
   const unsigned char LCD_SPI_INIT_DATA[] = {
-       //0xE2,  // soft reset
-       0xA2,   // bias 1/9
-       //0xA3,   // bias 1/7
-       0xC8,   // reverse scan dir
-       0x81,   // contrast control (next byte)
-       35,     // actual contrast (0..63)
-       0x25,   // regulation resistor ratio (0..7)
-       0x2F,   // control power circuits - last 3 bits = VB/VR/VF
-       0xF8, 1, // Set boost level to 5x - draws maybe 0.04mA more, but much better blacks
-       0xA0,   // start at column 128
-       0xAF    // disp on
+      //  //0xE2,  // soft reset
+      //  0xA2,   // bias 1/9
+      //  //0xA3,   // bias 1/7
+      //  0xC8,   // reverse scan dir
+      //  0x81,   // contrast control (next byte)
+      //  35,     // actual contrast (0..63)
+      //  0x25,   // regulation resistor ratio (0..7)
+      //  0x2F,   // control power circuits - last 3 bits = VB/VR/VF
+      //  0xF8, 1, // Set boost level to 5x - draws maybe 0.04mA more, but much better blacks
+      //  0xA0,   // start at column 128
+      //  0xAF    // disp on
+
+
+0xA2,
+0xA0,
+0xC8,
+0x23,
+0x81,
+0x32,
+0x2F,
+0xB0,
+0xAF,
+0xA6
+
+
   };
   for (unsigned int i=0;i<sizeof(LCD_SPI_INIT_DATA);i++)
     lcd_wr(LCD_SPI_INIT_DATA[i]);
@@ -463,10 +477,10 @@ void jswrap_pixljs_init() {
   }
 
   // If the button is *still* pressed, remove all code from flash memory too!
-  if (firstStart && jshPinGetValue(BTN1_PININDEX) == BTN1_ONSTATE) {
-    jsfRemoveCodeFromFlash();
-    jsiConsolePrintf("Removed saved code from Flash\n");
-  }
+  // if (firstStart && jshPinGetValue(BTN1_PININDEX) == BTN1_ONSTATE) {
+  //   jsfRemoveCodeFromFlash();
+  //   jsiConsolePrintf("Removed saved code from Flash\n");
+  // }
   graphicsSetVar(&gfx);
 
   firstStart = false;
